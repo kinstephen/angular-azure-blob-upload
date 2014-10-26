@@ -31,19 +31,28 @@ angular.module('myapp')
 })
 ```
 
-This will expose the following methods
+This will expose the following method
 
-* [azureBlob.upload(config)]
+* azureBlob.upload(config)
 
 The config object has the following properties
 
 ```javascript
 {
-  baseUrl: // baseUrl for file,
-  sasToken: // Shared access signature querystring key/value,
-  file: // HTML5 File,
+  baseUrl: // baseUrl for blob file uri (i.e. http://<accountName>.blob.core.windows.net/<container>/<blobname>),
+  sasToken: // Shared access signature querystring key/value prefixed with ?,
+  file: // File object using the HTML5 File API,
   progress: // progress callback function,
   complete: // complete callback function,
   error: // error callback function,
 }
 ```
+
+
+CORS
+-------------
+
+Cross Origin Resource Sharing (CORS) must be enabled on the azure blob storage account. The following articles can assist with this...
+
+http://blogs.msdn.com/b/windowsazurestorage/archive/2014/02/03/windows-azure-storage-introducing-cors.aspx
+http://www.contentmaster.com/azure/windows-azure-storage-cors/
