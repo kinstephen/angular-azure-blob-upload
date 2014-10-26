@@ -14,6 +14,53 @@
 
         var BlockSize = 1024 * 512 // 512 KBs
 
+        /* config: {
+          baseUrl: // baseUrl for blob file uri (i.e. http://<accountName>.blob.core.windows.net/<container>/<blobname>),
+          sasToken: // Shared access signature querystring key/value prefixed with ?,
+          file: // File object using the HTML5 File API,
+          progress: // progress callback function,
+          complete: // complete callback function,
+          error: // error callback function,
+        } */
+        var upload = function (config) {
+            var state = initializeState(config);
+
+            var reader = new FileReader();
+            reader.onloadend = function (evt) {
+                if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+                    var uri = state.fileUrl + '&comp=block&blockid=' + state.blockIds[state.blockIds.length - 1];
+                    var requestData = new Uint8Array(evt.target.result);
+
+                    $log.log(uri);
+                    $http.put(uri, requestData,
+                        {
+                            headers: {
+                                'x-ms-blob-type': 'BlockBlob',
+                                'Content-Type': state.file.type,
+                            },
+                            transformRequest: [],
+                        }).success(function (data, status, headers, config) {
+                            $log.log(data);
+                            $log.log(status);
+                            state.bytesUploaded += requestData.length;
+
+                            var percentComplete = ((parseFloat(state.bytesUploaded) / parseFloat(state.file.size)) * 100).toFixed(2);
+                            if (state.progress) state.progress(percentComplete, data, status, headers, config);
+
+                            uploadFileInBlocks(reader, state);
+                        })
+                        .error(function (data, status, headers, config) {
+                            $log.log(data);
+                            $log.log(status);
+
+                            if (state.error) state.error(data, status, headers, config);
+                        });
+                }
+            };
+
+            uploadFileInBlocks(reader, state);
+        };
+
         var initializeState = function (config) {
             var maxBlockSize = BlockSize; // Default Block Size
             var numberOfBlocks = 1;
@@ -113,56 +160,7 @@
         };
 
         return {
-
-            /* config: {
-			  baseUrl: // baseUrl for blob file uri (i.e. http://<accountName>.blob.core.windows.net/<container>/<blobname>),
-			  sasToken: // Shared access signature querystring key/value prefixed with ?,
-			  file: // File object using the HTML5 File API,
-			  progress: // progress callback function,
-			  complete: // complete callback function,
-			  error: // error callback function,
-			} */
-
-            upload: function (config) {
-                var state = initializeState(config);
-
-
-                var reader = new FileReader();
-
-                reader.onloadend = function (evt) {
-                    if (evt.target.readyState == FileReader.DONE) { // DONE == 2
-                        var uri = state.fileUrl + '&comp=block&blockid=' + state.blockIds[state.blockIds.length - 1];
-                        var requestData = new Uint8Array(evt.target.result);
-
-                        $log.log(uri);
-                        $http.put(uri, requestData,
-                            {
-                                headers: {
-                                    'x-ms-blob-type': 'BlockBlob',
-                                    'Content-Type': state.file.type,
-                                },
-                                transformRequest: [],
-                            }).success(function (data, status, headers, config) {
-                                $log.log(data);
-                                $log.log(status);
-                                state.bytesUploaded += requestData.length;
-
-                                var percentComplete = ((parseFloat(state.bytesUploaded) / parseFloat(state.file.size)) * 100).toFixed(2);
-                                if (state.progress) state.progress(percentComplete, data, status, headers, config);
-
-                                uploadFileInBlocks(reader, state);
-                            })
-                            .error(function (data, status, headers, config) {
-                                $log.log(data);
-                                $log.log(status);
-
-                                if (state.error) state.error(data, status, headers, config);
-                            });
-                    }
-                };
-
-                uploadFileInBlocks(reader, state);
-            },
+            upload: upload,
         };
     };
 
