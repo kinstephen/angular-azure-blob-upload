@@ -58,7 +58,16 @@ Cross Origin Resource Sharing (CORS) must be enabled on the azure blob storage a
 
 [Windows Azure Storage and CORS](http://www.contentmaster.com/azure/windows-azure-storage-cors/)
 
-##<a name="contrib"></a> Issues & Contribution
+
+Special Thanks 
+======================
+
+Extreme thanks goes to Gaurav Mantri and his original work on this using plain JavaScript. Much of this comes from the blob post...
+(http://gauravmantri.com/2013/02/16/uploading-large-files-in-windows-azure-blob-storage-using-shared-access-signature-html-and-javascript). I took his original code from here and turned it into this re-usable angular service.
+
+Issues & Contribution
 
 For questions, bug reports, and feature request please search through existing [issue](https://github.com/kinstephen/angular-azure-blob-upload/issues) and if you don't find and answer open a new one  [here](https://github.com/kinstephen/angular-azure-blob-upload/issues/new). If you need support contact me on twitter at @kinstephen
+
+
 
