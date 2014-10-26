@@ -3,7 +3,7 @@ angular-azure-blob-upload
 
 AngularJS service for uploading to azure blob storage.
 
-Provides for the ability to upload to azure blob storage. It uploads it in chunks avoiding memory constraints of large files as a BlockBlob. The upload uses a Shared Access Signature (SAS) to secure the file upload.
+Provides for the ability to upload an HTML5 File to Azure's Blob Storage. The file uploaded in chunks to avoid memory issues as a BlockBlob. The upload uses a Shared Access Signature (SAS) to secure the file upload.
 
 Required dependencies
 -----------------------
@@ -26,9 +26,9 @@ How to use
 Add the azureBlob service as a dependacy to your controller like so:
 ```javascript
 angular.module('myapp')
-  .controller('MainCtrl', function ($scope, azureBlob) {
+  .controller('MainCtrl', ['$scope', 'azureBlob', function ($scope, azureBlob) {
   ...
-})
+}])
 ```
 
 This will expose the following method
