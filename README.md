@@ -3,7 +3,7 @@ angular-azure-blob-upload
 
 AngularJS service for uploading to azure blob storage.
 
-Provides for the ability to upload an HTML5 File to Azure's Blob Storage. The file uploaded in chunks to avoid memory issues as a BlockBlob. The upload uses a Shared Access Signature (SAS) to secure the file upload.
+Provides for the ability to upload an HTML5 File to Azure's Blob Storage. The file is uploaded in chunks to avoid memory issues as a BlockBlob. The upload uses a Shared Access Signature (SAS) to secure the file upload.
 
 Required dependencies
 -----------------------
@@ -23,7 +23,7 @@ angular.module('myapp', ['myApp.controllers', 'myApp.services', 'azureBlobUpload
 
 How to use
 -------------
-Add the azureBlob service as a dependacy to your controller like so:
+Add the azureBlob service as a dependency to your controller like so:
 ```javascript
 angular.module('myapp')
   .controller('MainCtrl', ['$scope', 'azureBlob', function ($scope, azureBlob) {
@@ -62,8 +62,8 @@ Cross Origin Resource Sharing (CORS) must be enabled on the azure blob storage a
 Special Thanks 
 -------------
 
-Extreme thanks goes to Gaurav Mantri and his original work on this using plain JavaScript. Much of this comes from the blob post...
-(http://gauravmantri.com/2013/02/16/uploading-large-files-in-windows-azure-blob-storage-using-shared-access-signature-html-and-javascript). I took his original code from here and turned it into this re-usable angular service.
+Extreme thanks goes to Gaurav Mantri and his original work using plain JavaScript. Much of it comes from the blob post...
+(http://gauravmantri.com/2013/02/16/uploading-large-files-in-windows-azure-blob-storage-using-shared-access-signature-html-and-javascript). I took his original code from here and turned it into a re-usable angular service.
 
 
 Issues & Contribution
