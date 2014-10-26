@@ -55,4 +55,10 @@ CORS
 Cross Origin Resource Sharing (CORS) must be enabled on the azure blob storage account. The following articles can assist with this...
 
 [Windows Azure Storage Introducing CORS](http://blogs.msdn.com/b/windowsazurestorage/archive/2014/02/03/windows-azure-storage-introducing-cors.aspx)
+
 [Windows Azure Storage and CORS](http://www.contentmaster.com/azure/windows-azure-storage-cors/)
+
+##<a name="contrib"></a> Issues & Contribution
+
+For questions, bug reports, and feature request please search through existing [issue](https://github.com/kinstephen/angular-azure-blob-upload/issues) and if you don't find and answer open a new one  [here](https://github.com/kinstephen/angular-azure-blob-upload/issues/new). If you need support contact me on twitter at @kinstephen
+
