@@ -115,13 +115,13 @@
         return {
 
             /* config: {
-               baseUrl: // baseUrl for file,
-               sasToken: // Shared access signature querystring key/value,
-               file: // HTML5 File,
-               progress: // progress callback function,
-               complete: // complete callback function,
-               error: // error callback function,
-            } */
+			  baseUrl: // baseUrl for blob file uri (i.e. http://<accountName>.blob.core.windows.net/<container>/<blobname>),
+			  sasToken: // Shared access signature querystring key/value prefixed with ?,
+			  file: // File object using the HTML5 File API,
+			  progress: // progress callback function,
+			  complete: // complete callback function,
+			  error: // error callback function,
+			} */
 
             upload: function (config) {
                 var state = initializeState(config);
