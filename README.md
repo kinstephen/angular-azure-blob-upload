@@ -54,5 +54,5 @@ CORS
 
 Cross Origin Resource Sharing (CORS) must be enabled on the azure blob storage account. The following articles can assist with this...
 
-http://blogs.msdn.com/b/windowsazurestorage/archive/2014/02/03/windows-azure-storage-introducing-cors.aspx
-http://www.contentmaster.com/azure/windows-azure-storage-cors/
+[Windows Azure Storage Introducing CORS](http://blogs.msdn.com/b/windowsazurestorage/archive/2014/02/03/windows-azure-storage-introducing-cors.aspx)
+[Windows Azure Storage and CORS](http://www.contentmaster.com/azure/windows-azure-storage-cors/)
