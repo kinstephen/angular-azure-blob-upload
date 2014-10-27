@@ -45,6 +45,7 @@ The config object has the following properties
   progress: // progress callback function,
   complete: // complete callback function,
   error: // error callback function,
+  blockSize: // Use this to override the DefaultBlockSize,
 }
 ```
 

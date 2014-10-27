@@ -1,7 +1,7 @@
 ﻿/**!
  * AngularJS Azure blob upload service with http post and progress.
  * @author  Stephen Brannan - twitter: @kinstephen
- * @version 1.0.0
+ * @version 1.0.1
  */
 (function () {
 
@@ -12,7 +12,7 @@
 
     function azureBlob($log, $http) {
 
-        var BlockSize = 1024 * 512 // 512 KBs
+        var DefaultBlockSize = 1024 * 32 // Default to 32KB
 
         /* config: {
           baseUrl: // baseUrl for blob file uri (i.e. http://<accountName>.blob.core.windows.net/<container>/<blobname>),
@@ -21,6 +21,7 @@
           progress: // progress callback function,
           complete: // complete callback function,
           error: // error callback function,
+          blockSize: // Use this to override the DefaultBlockSize
         } */
         var upload = function (config) {
             var state = initializeState(config);
@@ -62,13 +63,16 @@
         };
 
         var initializeState = function (config) {
-            var maxBlockSize = BlockSize; // Default Block Size
+            var blockSize = DefaultBlockSize;
+            if (config.blockSize) blockSize = config.blockSize;
+
+            var maxBlockSize = blockSize; // Default Block Size
             var numberOfBlocks = 1;
 
             var file = config.file;
 
             var fileSize = file.size;
-            if (fileSize < BlockSize) {
+            if (fileSize < blockSize) {
                 maxBlockSize = fileSize;
                 $log.log("max block size = " + maxBlockSize);
             }
