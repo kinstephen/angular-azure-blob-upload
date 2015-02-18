@@ -28,7 +28,7 @@
 
             var reader = new FileReader();
             reader.onloadend = function (evt) {
-                if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+                if (evt.target.readyState == FileReader.DONE && !state.cancelled) { // DONE == 2
                     var uri = state.fileUrl + '&comp=block&blockid=' + state.blockIds[state.blockIds.length - 1];
                     var requestData = new Uint8Array(evt.target.result);
 
@@ -60,6 +60,12 @@
             };
 
             uploadFileInBlocks(reader, state);
+
+            return {
+                cancel: function() {
+                    state.cancelled = true;
+                }
+            };
         };
 
         var initializeState = function (config) {
@@ -101,27 +107,30 @@
                 progress: config.progress,
                 complete: config.complete,
                 error: config.error,
+                cancelled: false
             };
         };
 
         var uploadFileInBlocks = function (reader, state) {
-            if (state.totalBytesRemaining > 0) {
-                $log.log("current file pointer = " + state.currentFilePointer + " bytes read = " + state.maxBlockSize);
+            if (!state.cancelled) {
+                if (state.totalBytesRemaining > 0) {
+                    $log.log("current file pointer = " + state.currentFilePointer + " bytes read = " + state.maxBlockSize);
 
-                var fileContent = state.file.slice(state.currentFilePointer, state.currentFilePointer + state.maxBlockSize);
-                var blockId = state.blockIdPrefix + pad(state.blockIds.length, 6);
-                $log.log("block id = " + blockId);
+                    var fileContent = state.file.slice(state.currentFilePointer, state.currentFilePointer + state.maxBlockSize);
+                    var blockId = state.blockIdPrefix + pad(state.blockIds.length, 6);
+                    $log.log("block id = " + blockId);
 
-                state.blockIds.push(btoa(blockId));
-                reader.readAsArrayBuffer(fileContent);
+                    state.blockIds.push(btoa(blockId));
+                    reader.readAsArrayBuffer(fileContent);
 
-                state.currentFilePointer += state.maxBlockSize;
-                state.totalBytesRemaining -= state.maxBlockSize;
-                if (state.totalBytesRemaining < state.maxBlockSize) {
-                    state.maxBlockSize = state.totalBytesRemaining;
+                    state.currentFilePointer += state.maxBlockSize;
+                    state.totalBytesRemaining -= state.maxBlockSize;
+                    if (state.totalBytesRemaining < state.maxBlockSize) {
+                        state.maxBlockSize = state.totalBytesRemaining;
+                    }
+                } else {
+                    commitBlockList(state);
                 }
-            } else {
-                commitBlockList(state);
             }
         };
 
