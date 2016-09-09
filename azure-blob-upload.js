@@ -12,7 +12,7 @@
 
     function azureBlob($log, $http) {
 
-        var DefaultBlockSize = 1024 * 32 // Default to 32KB
+        var DefaultBlockSize = 1024 * 32; // Default to 32KB
 
         /* config: {
           baseUrl: // baseUrl for blob file uri (i.e. http://<accountName>.blob.core.windows.net/<container>/<blobname>),
@@ -46,7 +46,7 @@
                             state.bytesUploaded += requestData.length;
 
                             var percentComplete = ((parseFloat(state.bytesUploaded) / parseFloat(state.file.size)) * 100).toFixed(2);
-                            if (state.progress) state.progress(percentComplete, data, status, headers, config);
+                            if (state.progress) state.progress(percentComplete, data, status, headers, config, state.file);
 
                             uploadFileInBlocks(reader, state);
                         })
@@ -83,7 +83,7 @@
                 $log.log("max block size = " + maxBlockSize);
             }
 
-            if (fileSize % maxBlockSize == 0) {
+            if (fileSize % maxBlockSize === 0) {
                 numberOfBlocks = fileSize / maxBlockSize;
             } else {
                 numberOfBlocks = parseInt(fileSize / maxBlockSize, 10) + 1;
@@ -153,12 +153,12 @@
             }).success(function (data, status, headers, config) {
                 $log.log(data);
                 $log.log(status);
-                if (state.complete) state.complete(data, status, headers, config);
+                if (state.complete) state.complete(data, status, headers, config, state.file);
             })
             .error(function (data, status, headers, config) {
                 $log.log(data);
                 $log.log(status);
-                if (state.error) state.error(data, status, headers, config);
+                if (state.error) state.error(data, status, headers, config, state.file);
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
             });
@@ -175,6 +175,6 @@
         return {
             upload: upload,
         };
-    };
+    }
 
 })();
