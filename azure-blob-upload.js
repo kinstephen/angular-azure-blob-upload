@@ -40,21 +40,20 @@
                                 'Content-Type': state.file.type,
                             },
                             transformRequest: [],
-                        }).success(function (data, status, headers, config) {
-                            $log.log(data);
-                            $log.log(status);
+                        }).then(function (response) {
+                            $log.log(response.data);
+                            $log.log(response.status);
                             state.bytesUploaded += requestData.length;
 
                             var percentComplete = ((parseFloat(state.bytesUploaded) / parseFloat(state.file.size)) * 100).toFixed(2);
-                            if (state.progress) state.progress(percentComplete, data, status, headers, config);
+                            if (state.progress) state.progress(percentComplete, response.data, response.status, response.headers, response.config);
 
                             uploadFileInBlocks(reader, state);
-                        })
-                        .error(function (data, status, headers, config) {
-                            $log.log(data);
-                            $log.log(status);
+                        }, function (response) {
+                            $log.log(response.data);
+                            $log.log(response.status);
 
-                            if (state.error) state.error(data, status, headers, config);
+                            if (state.error) state.error(response.data, response.status, response.headers, response.config);
                         });
                 }
             };
@@ -62,7 +61,7 @@
             uploadFileInBlocks(reader, state);
 
             return {
-                cancel: function() {
+                cancel: function () {
                     state.cancelled = true;
                 }
             };
@@ -146,22 +145,19 @@
             $log.log(requestBody);
 
             $http.put(uri, requestBody,
-            {
-                headers: {
-                    'x-ms-blob-content-type': state.file.type,
-                }
-            }).success(function (data, status, headers, config) {
-                $log.log(data);
-                $log.log(status);
-                if (state.complete) state.complete(data, status, headers, config);
-            })
-            .error(function (data, status, headers, config) {
-                $log.log(data);
-                $log.log(status);
-                if (state.error) state.error(data, status, headers, config);
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
-            });
+                {
+                    headers: {
+                        'x-ms-blob-content-type': state.file.type,
+                    }
+                }).then(function (response) {
+                    $log.log(response.data);
+                    $log.log(response.status);
+                    if (state.complete) state.complete(response.data, response.status, response.headers, response.config);
+                }, function (response) {
+                    $log.log(response.data);
+                    $log.log(response.status);
+                    if (state.error) state.error(response.data, response.status, response.headers, response.config);
+                });
         };
 
         var pad = function (number, length) {
